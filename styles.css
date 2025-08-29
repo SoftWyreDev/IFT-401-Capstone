@@ -1,0 +1,47 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: linear-gradient(
+   160deg,
+    #f9fcff 0%,   /* bright ice white-blue */
+    #e6f2fb 40%,  /* pale icy blue */
+    #d6e9f9 100%  
+  );
+}
+
+
+nav ul {
+  position: fixed;       
+  top: 0;  
+  left: 0;
+  height: 100%;           
+  width: 150px;            
+  background: linear-gradient(
+    260deg,
+    #5f8fd9 70%,  
+    #3a66b3 100%);
+  padding-top: 3rem;
+  list-style: none;
+  margin: 0;
+  font-size: 1rem;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+}
+
+nav li {
+    margin-top: 3rem;
+}
+
+main {
+  margin-left: 200px;
+  padding: 20px;
+}
+
+main h1 {
+  color: #5f8fd9;
+  font-family: Arial;
+}
