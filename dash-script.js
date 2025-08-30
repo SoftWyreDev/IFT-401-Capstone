@@ -1,18 +1,28 @@
-<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 document.addEventListener('DOMContentLoaded', () => {
-const cookies = document.cookie.split(';').reduce((acc, cookie) => {
-    const [name, val] = cookie.trim().split('=');
-    acc[name] = val;
-    return acc;
-}, {});
-
-const token = cookies.session;
-if (!token) return (window.location = '/login.html');
-
-try {
-    const { username } = jwt_decode(token);
-    document.getElementById('greeting').textContent = `Hello, ${username}!`;
-} catch {
+  const username = localStorage.getItem('username');
+  if (!username) {
     window.location = '/login.html';
-}
+    return;
+  }
+
+  // Greeting
+  const greeting = document.getElementById('greeting');
+  if (greeting) {
+    greeting.textContent = `Hello, ${username}!`;
+  }
+
+  // login status
+  const userInfo = document.getElementById('user-info');
+  if (userInfo) {
+    userInfo.textContent = `Logged in as ${username}`;
+  }
+
+  // Logout button
+  const logoutBtn = document.getElementById('logout');
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      localStorage.clear();
+      location.href = '/login.html';
+    };
+  }
 });
