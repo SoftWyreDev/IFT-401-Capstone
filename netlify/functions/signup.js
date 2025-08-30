@@ -14,10 +14,10 @@ export async function handler(event) {
         return { statusCode: 400, body: 'missing fields' };
 
     try {
-        const sql = neon();                   // uses NETLIFY_DATABASE_URL automatically
+        const sql = neon();                   
         const hash = await bcrypt.hash(password, 12);
 
-        const rows = await sql/* sql */`
+        const rows = await sql`
       INSERT INTO users (username, email, password_hash)
       VALUES (${username}, ${email}, ${hash})
       RETURNING id, username, email, created_at

@@ -1,0 +1,12 @@
+[[redirects]]
+  from = "/app/*"
+  to = "/app/:splat"
+  status = 200
+  force = true
+  conditions = { Role = ["user"] }
+
+[[redirects]]
+  from = "/app/*"
+  to = "/login.html"
+  status = 401
+  force = true
