@@ -29,8 +29,23 @@
             <input type="number" step="0.01" name="price" placeholder="Price" required>
             <button type="submit">Create Stock</button>
         </form>
+        <br><br><br><br>
+        <h2 class="text-style">Current Market Hours</h2>
+        <form class='text-style' id="market-hours-form">
+            <label><b>Open Time:</b>  <input type="time" id="open-time" required></label>
+            <label><b>Close Time:</b>  <input type="time" id="close-time" required></label>
+            <button type="submit">Save Market Hours</button>
+        </form>
+        <br><br><br><br>
+        <h2 class="text-style">Toggle Market</h2>
+        <label class="switch">
+            <input type="checkbox" id="manual-closed-toggle">
+            <span class="slider"></span>
+        </label>
+        <b><span id="market-status" class="market-message"></span></b>
     </main>
     <script src="create-stock-script.js"></script>
+    <script src="update-schedule-script.js"></script>
     <script src="status-script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </body>
