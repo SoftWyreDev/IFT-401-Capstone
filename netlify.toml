@@ -7,6 +7,6 @@
 
 [[redirects]]
   from = "/app/*"
-  to = "/login.html"
+  to = "/index.html"
   status = 401
   force = true

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const username = localStorage.getItem('username');
   if (!username) {
-    window.location = '/login.html';
+    window.location = '/index.html';
     return;
   }
 
@@ -22,7 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) {
     logoutBtn.onclick = () => {
       localStorage.clear();
-      location.href = '/login.html';
+      location.href = '/index.html';
     };
+  }
+    if (!username) {
+    if (logoutBtn) logoutBtn.style.display = 'none';
+    return;
   }
 });

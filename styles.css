@@ -65,3 +65,8 @@ main h1 {
   font-family: Arial;
   color: #5f8fd9;
 }
+
+#greeting {
+  color: #5f8fd9;
+  font-family: Arial;
+}
