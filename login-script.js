@@ -14,6 +14,7 @@ form.onsubmit = async (e) => {
     const data = await res.json();
     localStorage.setItem('token', data.token);
     localStorage.setItem('username', data.username);
+    localStorage.setItem('role', data.role);
     location.href = 'index.html';
   } else {
     document.getElementById('msg').textContent = await res.text();

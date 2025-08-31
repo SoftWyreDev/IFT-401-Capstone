@@ -1,11 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
   const username = localStorage.getItem('username'); 
+  const role = localStorage.getItem('role');
+  const adminPanel = document.getElementById('admin-panel');
 
- const signMessage = document.getElementById("sign-message")
+  if (role != 'admin') {
+    adminPanel.style.display = 'none';
+  }
+
+ const signMessage = document.getElementById("sign-message");
   if (username) {
     signMessage.style.display = 'none';
   }
-  
+
   // Logout button
   const logoutBtn = document.getElementById('logout');
   if (!username) {

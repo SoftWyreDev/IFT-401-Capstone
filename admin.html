@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="portfolio.html">Portfolio</a></li>
+            <li><a href="trade.html">Buy/Sell</a></li>
+            <li><a href="transfer.html">Deposit/Withdraw</a></li>
+            <li><a href="transactions.html">Transactions</a></li>
+            <li id="admin-panel"><a href="admin.html"><b>Admin Panel</b></a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>IFT 401 Stock Trading System</h1>
+        <div id="user-info" class="top-right"></div>
+        <button id="logout" class="log-out">Log out</button>
+        <h2 class="text-style">Add New Stocks</h2>
+        <form id="create-stock">
+            <input type="text" name="company" placeholder="Company" required>
+            <input type="text" name="ticker" placeholder="Ticker" required>
+            <input type="number" name="volume" placeholder="Volume" required>
+            <input type="number" step="0.01" name="price" placeholder="Price" required>
+            <button type="submit">Create Stock</button>
+        </form>
+    </main>
+    <script src="create-stock-script.js"></script>
+    <script src="status-script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+</body>
+</html>

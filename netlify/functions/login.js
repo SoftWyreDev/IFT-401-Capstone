@@ -24,8 +24,8 @@ export async function handler(event) {
   const sql = neon();
 
   const users = await sql`
-    SELECT id, username, email, password_hash
-    FROM users
+    SELECT id, username, email, password_hash, role
+    FROM users 
     WHERE email = ${emailOrUsername} OR username = ${emailOrUsername}
     LIMIT 1
   `;
@@ -39,11 +39,12 @@ export async function handler(event) {
     {
       sub: user.id,
       username: user.username,
-      exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, // 7 days
+      role: user.role,
+      exp: Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60, 
       iat: Math.floor(Date.now() / 1000),
       app_metadata: {
         authorization: {
-          roles: ["user"]
+          roles: [user.role]
         }
       }
     },
@@ -57,7 +58,8 @@ export async function handler(event) {
     body: JSON.stringify({
       ok: true,
       token,
-      username: user.username
+      username: user.username,
+      role: user.role
     })
   };
 }

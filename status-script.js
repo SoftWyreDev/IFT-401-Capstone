@@ -1,5 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
   const username = localStorage.getItem('username');
+  const adminPanel = document.getElementById('admin-panel');
+  const role = localStorage.getItem('role');
+
+  if (role !== 'admin') {
+    adminPanel.style.display = 'none';
+  }
+
   if (!username) {
     window.location = '/index.html';
     return;
@@ -8,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Greeting
   const greeting = document.getElementById('greeting');
   if (greeting) {
-    greeting.textContent = `Hello, ${username}!`;
+    greeting.textContent = `Welcome, ${username}!`;
   }
 
   // login status
