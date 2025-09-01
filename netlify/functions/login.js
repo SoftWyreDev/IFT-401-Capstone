@@ -30,10 +30,10 @@ export async function handler(event) {
     LIMIT 1
   `;
   const user = users[0];
-  if (!user) return { statusCode: 401, body: 'invalid credentials' };
+  if (!user) return { statusCode: 401, body: 'Invalid credentials' };
 
   const ok = await bcrypt.compare(password, user.password_hash);
-  if (!ok) return { statusCode: 401, body: 'invalid credentials' };
+  if (!ok) return { statusCode: 401, body: 'Invalid credentials' };
 
   const token = jwt.sign(
     {
