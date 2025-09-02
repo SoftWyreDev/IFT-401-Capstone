@@ -16,16 +16,16 @@ export function checkTradingTime(schedule) {
   if (!allowedDays.includes(today)) return { allowed: false, message: 'Market Closed on Weekends' };
 
   // Holiday check
-  const todayDate = new Date(now);
-  todayDate.setHours(0,0,0,0); 
+  // const todayDate = new Date(now);
+  // todayDate.setHours(0,0,0,0); 
 
-  const isHoliday = schedule.holidays && schedule.holidays.some(d => {
-    const holidayDate = new Date(d);
-    holidayDate.setHours(0,0,0,0); 
-    return holidayDate.getTime() === todayDate.getTime();
-  });
+  // const isHoliday = schedule.holidays && schedule.holidays.some(d => {
+  //   const holidayDate = new Date(d);
+  //   holidayDate.setHours(0,0,0,0); 
+  //   return holidayDate.getTime() === todayDate.getTime();
+  // });
 
-  if (isHoliday) return { allowed: false, message: 'Market Closed on Holidays' };
+  // if (isHoliday) return { allowed: false, message: 'Market Closed on Holidays' };
 
   // Open/close times
   const [openH, openM] = schedule.open_time.split(':').map(Number);
@@ -34,8 +34,15 @@ export function checkTradingTime(schedule) {
   const openMinutes = openH * 60 + openM;
   const closeMinutes = closeH * 60 + closeM;
 
+  if (closeMinutes > openMinutes) {
+  // Normal same-day market
   if (minutesNow < openMinutes || minutesNow >= closeMinutes)
     return { allowed: false, message: "Market Closed After Hours" };
+} else {
+  // Market wraps past midnight
+  if (minutesNow < openMinutes && minutesNow >= closeMinutes)
+    return { allowed: false, message: "Market Closed After Hours" };
+}
 
   return { allowed: true };
 }
@@ -75,7 +82,6 @@ export async function handler(event) {
 
     const marketSchedule = tradingRules[0];
 
-    // --- Replace inline checks with helper function ---
     const tradingStatus = checkTradingTime(marketSchedule);
     if (!tradingStatus.allowed) {
       return { statusCode: 403, body: JSON.stringify({ error: tradingStatus.message }) };
@@ -90,7 +96,7 @@ export async function handler(event) {
     const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
     if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
     const price = Number(stockData[0].price);
-    const totalCost = price * qty;
+    const totalCost = Math.round(price * 100) * qty / 100;
 
     if (balance < totalCost) return { statusCode: 400, body: JSON.stringify({ message: 'Insufficient Funds' }) };
 

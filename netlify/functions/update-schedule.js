@@ -32,18 +32,22 @@ export async function handler(event) {
     return { statusCode: 400, body: 'Missing fields' };
   }
 
+  console.log('Incoming data:', data);
+  
   const sql = neon();
   try {
     await sql`
-      UPDATE market_schedule
-      SET open_time = ${open_time}, close_time = ${close_time}, manual_closed = ${manual_closed}
-      WHERE id = 1
+    UPDATE market_schedule
+    SET open_time = ${open_time}, close_time = ${close_time}, manual_closed = ${manual_closed}
+    WHERE id = 1
     `;
+    
     return {
       statusCode: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ok: true, message: 'Market schedule updated' })
+      body: JSON.stringify({ ok: true, message: 'Market Hours Updated!' })
     };
+
   } catch (e) {
     console.error(e);
     return { statusCode: 500, body: 'Database error' };
