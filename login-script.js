@@ -16,7 +16,11 @@ form.onsubmit = async (e) => {
     localStorage.setItem('username', data.username);
     localStorage.setItem('role', data.role);
     location.href = 'index.html';
+    msg.style.color = 'green'; 
   } else {
-    document.getElementById('msg').textContent = await res.text();
+    const errorData = await res.json();
+    msg.textContent = errorData.message || 'Login failed';
+    msg.style.color = 'red';
+    msg.style.fontWeight = 'bold';
   }
 };

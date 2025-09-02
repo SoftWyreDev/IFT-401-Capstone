@@ -7,7 +7,7 @@ async function loadBalance() {
     const data = await res.json();
 
     document.getElementById('balance').textContent =
-      `Balance: $${parseFloat(data.balance).toFixed(2)}`;
+      `Current Balance: $${parseFloat(data.balance).toFixed(2)}`;
   } catch (err) {
     console.error('Error fetching balance:', err);
   }

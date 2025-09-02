@@ -10,7 +10,19 @@ signupForm.onsubmit = async (e) => {
     body
   });
 
-  document.getElementById('msg').textContent =
-    res.ok ? 'Account created!' : await res.text();
+  const msg = document.getElementById('msg');
+  if (res.ok) {
+    msg.textContent = 'Account created! Redirecting to login...';
+    msg.style.color = 'green';
+    msg.style.fontWeight = 'bold';
+
+    setTimeout(() => {
+      window.location.href = '/login.html';
+    }, 3000);
+  } else {
+    msg.textContent = await res.text();
+    msg.style.color = 'red';
+    msg.style.fontWeight = 'bold';
+  }
 };
 

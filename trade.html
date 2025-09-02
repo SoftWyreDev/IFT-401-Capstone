@@ -22,7 +22,19 @@
         <div id="user-info" class="top-right"></div>
         <button id="logout" class="log-out">Log out</button>
         <h2 id="greeting"></h1>
+        <h3 class="text-style">Buy Stocks</h3>
+        <form id="buy-form" class="text-style">
+            <label for="ticker">Select Stock:</label>
+            <select id="ticker" required>
+                <option value="">-- Select a stock --</option>
+            </select>
+            <label for="shares">Number of Shares:</label>
+            <input type="number" id="shares" min="1" step="1" required>
+            <button type="submit">Buy</button>
+            <p id="buy-msg"></p>
+        </form>
     </main>
+    <script src="buy-script.js"></script>
     <script src="status-script.js"></script>
 </body>
 </html>

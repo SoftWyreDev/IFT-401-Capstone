@@ -22,7 +22,23 @@
         <div id="user-info" class="top-right"></div>
         <button id="logout" class="log-out">Log out</button>
         <h2 id="greeting"></h1>
+        <h2 class="text-style" id="balance">Current Balance: </h2>
+        <h3 class="text-style">Deposit Funds</h3>
+        <form id="deposit-form">
+            <input type="number" id="deposit-amount" placeholder="Amount" min="0" step="0.01" required>
+            <button type="submit">Deposit</button>
+        </form>
+        <p id="deposit-msg" class="msg"></p>
+        <h2 class="text-style">Withdraw</h2>
+        <form id="withdraw-form">
+            <input type="number" id="withdraw-amount" step="0.01" placeholder="Amount" min="0" required>
+            <button type="submit">Withdraw</button>
+        <p id="withdraw-msg" class="msg"></p>
+        </form>
     </main>
+    <script src="load-balance.js"></script>
+    <script src="deposit-script.js"></script>
+    <script src="withdraw-script.js"></script>
     <script src="status-script.js"></script>
 </body>
 </html>

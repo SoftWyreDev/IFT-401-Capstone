@@ -14,8 +14,8 @@ async function loadStocks() {
       row.innerHTML = `
         <td><b>${stock.ticker}</b></td>
         <td><b>${stock.quantity}</b></td>
-        <td><b>$${parseFloat(stock.avg_price).toFixed(2)}</b></td>
         <td><b>$${parseFloat(stock.current_price).toFixed(2)}</b></td>
+        <td><b>$${parseFloat(stock.current_price * stock.quantity).toFixed(2)}</b></td>
       `;
       tableBody.appendChild(row);
     });

@@ -34,7 +34,7 @@ function formatVolume(value) {
       stocks.forEach(stock => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td>${stock.ticker}</td>
+          <td><b>${stock.ticker}</b></td>
           <td>${stock.company}</td>
           <td><b>$${parseFloat(stock.price).toFixed(2)}</b></td>
           <td><b>${formatVolume(stock.volume)}</b></td>
