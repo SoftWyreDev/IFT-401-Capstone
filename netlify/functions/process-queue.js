@@ -38,7 +38,7 @@ export function checkTradingTime(schedule) {
   return { allowed: true };
 }
 
-// Handler 
+// Process queued orders 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }) };
@@ -55,72 +55,76 @@ export async function handler(event) {
     return { statusCode: 401, body: JSON.stringify({ error: 'Invalid token' }) };
   }
 
-  const userId = payload.sub;
   const sql = neon();
 
   try {
-    const { ticker, shares } = JSON.parse(event.body);
-    const qty = parseInt(shares, 10);
-    if (isNaN(qty) || qty <= 0) {
-      return { statusCode: 400, body: JSON.stringify({ message: 'Invalid shares value' }) };
-    }
-
     // Get market schedule 
     const tradingRules = await sql`SELECT * FROM market_schedule LIMIT 1`;
     if (!tradingRules.length) return { statusCode: 500, body: JSON.stringify({ error: 'Trading rules not found' }) };
     const marketSchedule = tradingRules[0];
-
-    // Get stock price 
-    const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
-    if (!stockData.length) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
-    const price = Number(stockData[0].price);
-    const totalGain = Math.round(price * 100) * qty / 100;
-
-    // Get user shares
-    const userStock = await sql`
-      SELECT quantity
-      FROM user_stocks
-      WHERE user_id = ${userId} AND ticker = ${ticker}
-    `;
-    const ownedShares = userStock[0]?.quantity || 0;
-    if (qty > ownedShares) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: `Not enough shares to sell. You have ${ownedShares}` })
-      };
-    }
-
-    // Check trading time 
     const tradingStatus = checkTradingTime(marketSchedule);
 
-    if (tradingStatus.allowed) {
-      // Execute sell immediately 
-      await sql`UPDATE user_stocks SET quantity = quantity - ${qty} WHERE user_id = ${userId} AND ticker = ${ticker}`;
-      await sql`UPDATE users SET balance = balance + ${totalGain} WHERE id = ${userId}`;
+    // Fetch queued orders 
+    const queuedOrders = await sql`
+      SELECT * FROM queued_orders
+      WHERE executed = false
+      ORDER BY created_at ASC
+    `;
+    if (!queuedOrders.length) return { statusCode: 200, body: JSON.stringify({ message: 'No queued orders to execute' }) };
 
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ message: `Sold ${qty} share(s) of ${ticker} for $${totalGain.toFixed(2)}` })
-      };
-    } else {
-      // Queue the sell order 
-      await sql`
-        INSERT INTO queued_orders (user_id, ticker, shares, type)
-        VALUES (${userId}, ${ticker}, ${qty}, 'SELL')
-      `;
+    // Process orders
+    for (const order of queuedOrders) {
+      const orderUserId = order.user_id;
 
-      return {
-        statusCode: 200,
-        body: JSON.stringify({
-          message: `Sold ${qty} share(s) of ${ticker} for $${totalGain.toFixed(2)}<br><br>
-          Market CLOSED. Sell Order Queued until Market Opens`,
-          queued: true
-        })
-      };
+      // Fetch stock price
+      const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${order.ticker}`;
+      if (!stockData.length) continue;
+      const price = Number(stockData[0].price);
+      const totalValue = Math.round(price * 100) * order.shares / 100;
+
+      // Fetch user balance
+      const user = await sql`SELECT balance FROM users WHERE id = ${orderUserId}`;
+      if (!user.length) continue;
+      const balance = Number(user[0].balance);
+
+      //  Only execute if market is open 
+      if (tradingStatus.allowed) {
+        if (order.type === 'BUY') {
+          if (balance < totalValue) continue;
+
+          const existing = await sql`SELECT quantity FROM user_stocks WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
+          if (existing.length > 0) {
+            await sql`
+              UPDATE user_stocks
+              SET quantity = quantity + ${order.shares}
+              WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}
+            `;
+          } else {
+            await sql`
+              INSERT INTO user_stocks (user_id, ticker, quantity)
+              VALUES (${orderUserId}, ${order.ticker}, ${order.shares})
+            `;
+          }
+
+          await sql`UPDATE users SET balance = balance - ${totalValue} WHERE id = ${orderUserId}`;
+        }
+
+        if (order.type === 'SELL') {
+          const holding = await sql`SELECT quantity FROM user_stocks WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
+          if (!holding.length || holding[0].quantity < order.shares) continue;
+
+          await sql`UPDATE users SET balance = balance + ${totalValue} WHERE id = ${orderUserId}`;
+          await sql`UPDATE user_stocks SET quantity = quantity - ${order.shares} WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
+        }
+
+        // Mark as executed 
+        await sql`UPDATE queued_orders SET executed = true, status = 'COMPLETE' WHERE id = ${order.id}`;
+      }
     }
 
+    return { statusCode: 200, body: JSON.stringify({ message: 'Queued orders processed successfully' }) };
   } catch (err) {
-    console.error('Sell stock error:', err);
+    console.error('Process queue error:', err);
     return { statusCode: 500, body: JSON.stringify({ error: 'Server error' }) };
   }
 }

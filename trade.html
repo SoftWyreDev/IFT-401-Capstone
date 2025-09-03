@@ -33,21 +33,40 @@
             <label for="shares">Number of Shares:</label>
             <input type="number" id="shares" min="1" step="1" required>
             <button type="submit">Buy</button>
-            <p id="buy-msg"></p>
+            <b><p id="buy-msg"></p></b>
         </form>
         <br><br><br>
         <h3 class="text-style">Sell Stocks</h3>
         <form id="sell-form" class="text-style">
-            <label for="ticker">Select Stock:</label>
-            <select id="ticker" required>
+            <label for="sell-ticker">Select Stock:</label>
+            <select id="sell-ticker" required>
                 <option value="">-- Select a stock --</option>
             </select>
-            <label for="shares">Number of Shares:</label>
-            <input type="number" id="shares" min="1" step="1" required>
+            <label for="sell-shares">Number of Shares:</label>
+            <input type="number" id="sell-shares" min="1" step="1" required>
             <button type="submit">Sell</button>
-            <p id="sell-msg"></p>
+            <b><p id="sell-msg"></p></b>
         </form>
+        <br>
+        <h3 class="text-style">Pending Orders</h3>
+        <table id="stocks-table">
+        <thead>
+            <tr>
+            <th>Type</th>
+            <th>Ticker</th>
+            <th>Shares</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Cancel</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
     </main>
+    <script src="queue-script.js"></script>
+    <script src="load-queue.js"></script>
+    <script src="sell-script.js"></script>
+    <script src="load-sell-stocks.js"></script>
     <script src="load-balance.js"></script>
     <script src="buy-script.js"></script>
     <script src="status-script.js"></script>

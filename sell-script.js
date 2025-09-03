@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const userStocks = await res.json();
 
       sellTickerSelect.innerHTML = '<option value="">-- Select a stock --</option>';
-
+      
       userStocks.forEach(stock => {
         const option = document.createElement('option');
         option.value = stock.ticker;
@@ -55,22 +55,25 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = await res.json();
 
       if (res.ok) {
-        sellMsg.textContent = data.message;
+        sellMsg.innerHTML = data.message;
         sellMsg.style.color = 'green';
+        sellMsg.style.fontFamily = "Times New Roman"
         document.getElementById('sell-shares').value = '';
+        await window.loadQueuedOrders();
       } else {
         sellMsg.textContent = data.message || data.error || 'Error occurred';
         sellMsg.style.color = 'red';
+        sellMsg.style.fontFamily = "Times New Roman"
       }
 
       await loadBalance();
-      await loadStocks();
       await loadUserStocks();
 
     } catch (err) {
       console.error('Error selling stock:', err);
       sellMsg.textContent = 'Error processing sell order';
       sellMsg.style.color = 'red';
+      sellMsg.style.fontFamily = "Times New Roman"
     }
   });
 });

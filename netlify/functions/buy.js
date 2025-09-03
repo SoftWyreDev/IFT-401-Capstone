@@ -16,16 +16,16 @@ export function checkTradingTime(schedule) {
   if (!allowedDays.includes(today)) return { allowed: false, message: 'Market Closed on Weekends' };
 
   // Holiday check
-  // const todayDate = new Date(now);
-  // todayDate.setHours(0,0,0,0); 
+  const todayDate = new Date(now);
+  todayDate.setHours(0,0,0,0); 
 
-  // const isHoliday = schedule.holidays && schedule.holidays.some(d => {
-  //   const holidayDate = new Date(d);
-  //   holidayDate.setHours(0,0,0,0); 
-  //   return holidayDate.getTime() === todayDate.getTime();
-  // });
+  const isHoliday = schedule.holidays && schedule.holidays.some(d => {
+    const holidayDate = new Date(d);
+    holidayDate.setHours(0,0,0,0); 
+    return holidayDate.getTime() === todayDate.getTime();
+  });
 
-  // if (isHoliday) return { allowed: false, message: 'Market Closed on Holidays' };
+  if (isHoliday) return { allowed: false, message: 'Market Closed on Holidays' };
 
   // Open/close times
   const [openH, openM] = schedule.open_time.split(':').map(Number);
@@ -80,23 +80,36 @@ export async function handler(event) {
       return { statusCode: 500, body: JSON.stringify({ error: 'Trading rules not found' }) };
     }
 
+    const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
+    if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
+    const price = Number(stockData[0].price);
+    const totalCost = Math.round(price * 100) * qty / 100;
     const marketSchedule = tradingRules[0];
 
     const tradingStatus = checkTradingTime(marketSchedule);
     if (!tradingStatus.allowed) {
-      return { statusCode: 403, body: JSON.stringify({ error: tradingStatus.message }) };
-    }
+      // Queue the order
+      await sql`
+        INSERT INTO queued_orders (user_id, ticker, shares, type)
+        VALUES (${userId}, ${ticker}, ${qty}, 'BUY')
+      `;
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: `Bought ${qty} share(s) of ${ticker} for $${totalCost.toFixed(2)}<br><br>
+        Market CLOSED. Buy Order Queued until Market Opens`,
+        queued: true
+      })
+    };
+  }
 
     // --- Get user balance ---
     const user = await sql`SELECT balance FROM users WHERE id = ${userId}`;
     if (user.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'User not found' }) };
     const balance = Number(user[0].balance);
 
-    // --- Get current stock price ---
-    const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
     if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
-    const price = Number(stockData[0].price);
-    const totalCost = Math.round(price * 100) * qty / 100;
 
     if (balance < totalCost) return { statusCode: 400, body: JSON.stringify({ message: 'Insufficient Funds' }) };
 

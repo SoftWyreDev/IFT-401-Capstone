@@ -37,15 +37,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const data = await res.json(); 
 
     if (res.ok) {
-    buyMsg.textContent = data.message;
+    buyMsg.innerHTML = data.message;
     buyMsg.style.color = 'green';
+    buyMsg.style.fontFamily = "Times New Roman"
+    setTimeout(() => {
+    buyMsg.textContent = '';
+    }, 10000);
+    await window.loadQueuedOrders();
+
     } else {
     buyMsg.textContent = data.message || data.error || 'Error occurred';
     buyMsg.style.color = 'red';
+    buyMsg.style.fontFamily = "Times New Roman"
+
     }
 
     document.getElementById('shares').value = '';
 
+    await loadUserStocks();  
     await loadBalance();
     await loadStocks();
   });
