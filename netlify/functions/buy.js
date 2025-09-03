@@ -73,7 +73,7 @@ export async function handler(event) {
       return { statusCode: 400, body: JSON.stringify({ message: 'Invalid shares value' }) };
     }
 
-    // --- Get trading rules from DB ---
+    // Get trading rules from DB 
     const tradingRules = await sql`SELECT * FROM market_schedule LIMIT 1`;
     console.log('Trading schedule from DB:', tradingRules[0]);
     if (tradingRules.length === 0) {
@@ -97,14 +97,14 @@ export async function handler(event) {
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: `Bought ${qty} share(s) of ${ticker} for $${totalCost.toFixed(2)}<br><br>
-        Market CLOSED. Buy Order Queued until Market Opens`,
+        message: `Market CLOSED<br><br>
+        Queued ${qty} share(s) of ${ticker} for $${totalCost.toFixed(2)}`,
         queued: true
       })
     };
   }
 
-    // --- Get user balance ---
+    // Get user balance 
     const user = await sql`SELECT balance FROM users WHERE id = ${userId}`;
     if (user.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'User not found' }) };
     const balance = Number(user[0].balance);
@@ -113,7 +113,7 @@ export async function handler(event) {
 
     if (balance < totalCost) return { statusCode: 400, body: JSON.stringify({ message: 'Insufficient Funds' }) };
 
-    // --- Update or insert stock holdings ---
+    // Update or insert stock holdings
     const existing = await sql`SELECT quantity FROM user_stocks WHERE user_id = ${userId} AND ticker = ${ticker}`;
     if (existing.length > 0) {
       await sql`
@@ -128,8 +128,15 @@ export async function handler(event) {
       `;
     }
 
-    // --- Deduct balance ---
+    // Deduct balance
     await sql`UPDATE users SET balance = balance - ${totalCost} WHERE id = ${userId}`;
+
+    // Update User History
+    await sql`
+      INSERT INTO user_history (user_id, action, ticker, quantity, amount, created_at)
+      VALUES (${userId}, 'BUY', ${ticker}, ${qty}, ${totalCost}, NOW())
+    `;
+
 
     return {
       statusCode: 200,

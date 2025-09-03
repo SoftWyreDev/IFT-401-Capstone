@@ -107,14 +107,27 @@ export async function handler(event) {
           }
 
           await sql`UPDATE users SET balance = balance - ${totalValue} WHERE id = ${orderUserId}`;
+          await sql`
+            INSERT INTO user_history (user_id, action, ticker, quantity, amount, created_at)
+            VALUES (${orderUserId}, 'BUY', ${order.ticker}, ${order.shares}, ${totalValue}, NOW())
+            `;
         }
 
         if (order.type === 'SELL') {
           const holding = await sql`SELECT quantity FROM user_stocks WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
           if (!holding.length || holding[0].quantity < order.shares) continue;
 
-          await sql`UPDATE users SET balance = balance + ${totalValue} WHERE id = ${orderUserId}`;
-          await sql`UPDATE user_stocks SET quantity = quantity - ${order.shares} WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
+          await sql`UPDATE users SET balance = balance + ${totalValue} 
+            WHERE id = ${orderUserId}`;
+          await sql`UPDATE user_stocks SET quantity = quantity - ${order.shares} 
+            WHERE user_id = ${orderUserId} AND ticker = ${order.ticker}`;
+          await sql`
+            INSERT INTO user_history (user_id, action, ticker, quantity, amount, created_at)
+            VALUES (${orderUserId}, 'SELL', ${order.ticker}, ${order.shares}, ${totalValue}, NOW())
+            `;      
+          await sql`
+            DELETE FROM user_stocks
+            WHERE user_id = ${orderUserId} AND ticker = ${order.ticker} AND quantity <= 0`;
         }
 
         // Mark as executed 

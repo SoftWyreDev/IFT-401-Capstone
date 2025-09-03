@@ -48,6 +48,12 @@ if (result.length === 0) {
   };
 }
 
+await sql`
+  INSERT INTO user_history (user_id, action, amount, created_at)
+  VALUES (${userId}, 'WITHDRAW', ${amount}, NOW())
+  `;
+
+
 return {
   statusCode: 200,
   headers: { 'Content-Type': 'application/json' },

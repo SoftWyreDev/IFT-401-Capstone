@@ -30,7 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <td>${order.shares}</td>
           <td>${localTime} (PDT)</td>
           <td><b>${order.status}</b></td>
-          <td><button class="cancel-btn" onclick="cancelQueuedOrder(${order.id})">❌</button></td>
+          <td>
+           ${order.status === 'COMPLETE'
+          ? ''
+           : `<button class="cancel-btn" onclick="cancelQueuedOrder(${order.id})">❌</button>`}
+          </td>
         `;
         tableBody.appendChild(row);
       });

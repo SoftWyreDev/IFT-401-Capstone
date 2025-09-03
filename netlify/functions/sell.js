@@ -95,8 +95,20 @@ export async function handler(event) {
 
     if (tradingStatus.allowed) {
       // Execute sell immediately 
-      await sql`UPDATE user_stocks SET quantity = quantity - ${qty} WHERE user_id = ${userId} AND ticker = ${ticker}`;
-      await sql`UPDATE users SET balance = balance + ${totalGain} WHERE id = ${userId}`;
+      await sql`UPDATE user_stocks SET quantity = quantity - ${qty} 
+        WHERE user_id = ${userId} AND ticker = ${ticker}`;
+      await sql`UPDATE users SET balance = balance + ${totalGain} 
+        WHERE id = ${userId}`;
+      // Update User History
+      await sql`
+        INSERT INTO user_history (user_id, action, ticker, quantity, amount, created_at)
+        VALUES (${userId}, 'SELL', ${ticker}, ${qty}, ${totalGain}, NOW())
+        `;
+      // Delete if Zero
+      await sql`
+        DELETE FROM user_stocks
+        WHERE user_id = ${userId} AND ticker = ${ticker} AND quantity <= 0
+        `;
 
       return {
         statusCode: 200,
@@ -112,8 +124,8 @@ export async function handler(event) {
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: `Sold ${qty} share(s) of ${ticker} for $${totalGain.toFixed(2)}<br><br>
-          Market CLOSED. Sell Order Queued until Market Opens`,
+          message: `Market CLOSED<br><br>
+          Queued ${qty} share(s) of ${ticker} for $${totalGain.toFixed(2)}`,
           queued: true
         })
       };

@@ -34,15 +34,22 @@ export async function handler(event) {
 
   const sql = neon();
 
-  await sql`
+  const result = await sql`
     UPDATE users
     SET balance = balance + ${amount}
     WHERE id = ${userId}
+    RETURNING balance
   `;
+
+  await sql`
+  INSERT INTO user_history (user_id, action, amount, created_at)
+  VALUES (${userId}, 'DEPOSIT', ${amount}, NOW())
+  `;
+
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ok: true, newBalance: amount })
+    body: JSON.stringify({ ok: true, newBalance: result[0].balance })
   };
 }
