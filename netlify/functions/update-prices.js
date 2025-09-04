@@ -9,25 +9,42 @@ export async function handler() {
   `;
 
   const now = new Date();
-  const marketOpenToday = new Date();
-  marketOpenToday.setHours(9, 30, 0, 0); // 9:30 AM today
+
+  // Today’s 9:30 AM
+  const marketOpenToday = new Date(now);
+  marketOpenToday.setHours(9, 30, 0, 0);
 
   for (const stock of stocks) {
-    // Determine if we need to reset open/high/low for a new market day
     const lastUpdate = new Date(stock.price_update);
-    const isNewMarketDay = lastUpdate < marketOpenToday;
 
-    // Generate new price
+    // Has this stock been updated *before* today’s market open?
+    const isNewMarketDay =
+      lastUpdate < marketOpenToday && now >= marketOpenToday;
+
+    // Generate price movement
     const pctChange = (Math.random() * 0.3 + 0.05) / 100;
     const direction = Math.random() < 0.5 ? -1 : 1;
-    const newPrice = Math.max(0, parseFloat(stock.price) * (1 + direction * pctChange));
+    const newPrice = Math.max(
+      0,
+      parseFloat(stock.price) * (1 + direction * pctChange)
+    );
 
-    // Reset open/high/low if it's a new market day
-    const openPrice = isNewMarketDay ? newPrice : stock.price_open || newPrice;
-    const highPrice = isNewMarketDay ? newPrice : Math.max(stock.price_high || newPrice, newPrice);
-    const lowPrice = isNewMarketDay ? newPrice : Math.min(stock.price_low || newPrice, newPrice);
+    let openPrice = stock.price_open;
+    let highPrice = stock.price_high;
+    let lowPrice = stock.price_low;
 
-    // Update DB
+    if (isNewMarketDay) {
+      // Reset once at market open
+      openPrice = newPrice;
+      highPrice = newPrice;
+      lowPrice = newPrice;
+    } else {
+      // Keep the same open price all day
+      openPrice = stock.price_open ?? newPrice;
+      highPrice = Math.max(stock.price_high ?? newPrice, newPrice);
+      lowPrice = Math.min(stock.price_low ?? newPrice, newPrice);
+    }
+
     await sql`
       UPDATE stocks
       SET price = ${newPrice},
