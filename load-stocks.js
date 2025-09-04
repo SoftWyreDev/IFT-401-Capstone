@@ -64,5 +64,5 @@ function formatVolume(value) {
   setInterval(async () => {
     await fetch('/.netlify/functions/update-prices'); 
     loadStocks(); 
-  }, 5000);
+  }, 30000);
 });
