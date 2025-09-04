@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tableBody.innerHTML = '';
 
       if (queuedOrders.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><b>No pending orders</b></td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;"><b>No Queued Orders</b></td></tr>`;
         return;
         }
 

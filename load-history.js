@@ -9,7 +9,7 @@ async function loadUserHistory() {
   tableBody.innerHTML = '';
 
   if (history.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="5">No history found</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center"><b>No Transaction History</b></td></tr>';
     return;
   }
 

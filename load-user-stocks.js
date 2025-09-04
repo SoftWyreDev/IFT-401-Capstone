@@ -9,6 +9,12 @@ async function loadStocks() {
     const tableBody = document.querySelector('#stocks-table tbody');
     tableBody.innerHTML = '';
 
+    if (stocks.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;"><b>No Owned Stocks</b></td></tr>`;
+        return;
+        }
+    
+
     stocks.forEach(stock => {
       const row = document.createElement('tr');
       row.innerHTML = `

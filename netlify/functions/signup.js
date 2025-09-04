@@ -9,8 +9,8 @@ export async function handler(event) {
     try { data = JSON.parse(event.body || '{}'); }
     catch { return { statusCode: 400, body: 'invalid json' }; }
 
-    const { username, email, password } = data;
-    if (!username || !email || !password)
+    const { username, email, password, full_name} = data;
+    if (!username || !email || !password || !full_name)
         return { statusCode: 400, body: 'missing fields' };
 
     try {
@@ -18,8 +18,8 @@ export async function handler(event) {
         const hash = await bcrypt.hash(password, 12);
 
         const rows = await sql`
-      INSERT INTO users (username, email, password_hash)
-      VALUES (${username}, ${email}, ${hash})
+      INSERT INTO users (username, email, password_hash, full_name)
+      VALUES (${username}, ${email}, ${hash}, ${full_name})
       RETURNING id, username, email, created_at
     `;
 

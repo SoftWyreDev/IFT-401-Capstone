@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function formatMarketCap(value) {
   if (value >= 1_000_000_000) {
-    return `$${(value / 1_000_000_000).toFixed(2)}B`;
+    return `${(value / 1_000_000_000).toFixed(2)}B`;
   } else if (value >= 1_000_000) {
-    return `$${(value / 1_000_000).toFixed(2)}M`;
+    return `${(value / 1_000_000).toFixed(2)}M`;
   } else if (value >= 1_000) {
-    return `$${(value / 1_000).toFixed(2)}K`;
+    return `${(value / 1_000).toFixed(2)}K`;
   }
   return `$${value}`;
 }
@@ -38,7 +38,11 @@ function formatVolume(value) {
           <td>${stock.company}</td>
           <td><b>$${parseFloat(stock.price).toFixed(2)}</b></td>
           <td><b>${formatVolume(stock.volume)}</b></td>
-          <td><b>${formatMarketCap(stock.volume * stock.price)}</b></td>
+          <td><b>$${
+            stock.volume * stock.price < 1000 
+              ? (stock.volume * stock.price).toFixed(2) 
+              : formatMarketCap(stock.volume * stock.price)
+          }</b></td>
           <td><b>$${parseFloat(stock.price_open).toFixed(2)}</b></td>
           <td><b>$${parseFloat(stock.price_high).toFixed(2)}</b></td>
           <td><b>$${parseFloat(stock.price_low).toFixed(2)}</b></td>
@@ -56,9 +60,9 @@ function formatVolume(value) {
   // Initial load immediately
   loadStocks();
 
-//   // Polling every 5 seconds
-//   setInterval(async () => {
-//     await fetch('/.netlify/functions/update-prices'); 
-//     loadStocks(); 
-//   }, 30000);
+  // Polling every 30 seconds
+  setInterval(async () => {
+    await fetch('/.netlify/functions/update-prices'); 
+    loadStocks(); 
+  }, 30000);
 });
