@@ -3,12 +3,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminPanel = document.getElementById('admin-panel');
   const role = localStorage.getItem('role');
 
-  if (role !== 'admin') {
-    adminPanel.style.display = 'none';
+  if (role === 'admin') {
+    adminPanel.style.display = 'block';
   }
-
+  
   if (!username) {
     window.location = '/index.html';
+    alert('You must be signed in to view this page.');
+    console.log(localStorage.getItem('role'));
+
     return;
   }
 

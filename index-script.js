@@ -3,9 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const role = localStorage.getItem('role');
   const adminPanel = document.getElementById('admin-panel');
 
-  if (role != 'admin') {
-    adminPanel.style.display = 'none';
+  if (role === 'admin') {
+    adminPanel.style.display = 'block';
   }
+  
 
  const signMessage = document.getElementById("sign-message");
   if (username) {

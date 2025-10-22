@@ -56,6 +56,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (res.ok) {
         sellMsg.innerHTML = data.message;
+        setTimeout(() => {
+          sellMsg.textContent = '';
+        }, 5000);
         sellMsg.style.color = 'green';
         sellMsg.style.fontFamily = "Times New Roman"
         document.getElementById('sell-shares').value = '';

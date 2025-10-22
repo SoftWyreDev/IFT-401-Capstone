@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     buyMsg.style.fontFamily = "Times New Roman"
     setTimeout(() => {
     buyMsg.textContent = '';
-    }, 10000);
+    }, 5000);
     await window.loadQueuedOrders();
 
     } else {

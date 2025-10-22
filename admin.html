@@ -21,6 +21,7 @@
         <h1>IFT 401 Stock Trading System</h1>
         <div id="user-info" class="top-right"></div>
         <button id="logout" class="log-out">Log out</button>
+        <br>
         <h2 class="text-style">Add New Stocks</h2>
         <form id="create-stock">
             <input type="text" name="company" placeholder="Company" required>
@@ -29,15 +30,15 @@
             <input type="number" step="0.01" name="price" placeholder="Price" required>
             <button type="submit">Create Stock</button>
         </form>
-        <br><br><br><br>
+        <br>
         <h2 class="text-style">Current Market Hours (UTC)</h2>
         <form class='text-style' id="market-hours-form">
             <label><b>Open Time:</b>  <input type="time" id="open-time" required></label>
-            <label><b>Close Time:</b>  <input type="time" id="close-time" required></label>
+            <label><b>Close Time:</b>  <input type="time" id="close-time" required></label><br>
             <button type="submit" id="save-schedule">Save Market Hours</button>
             <p id="schedule-msg"></p>
         </form>
-        <br><br><br><br>
+        <br>
         <h2 class="text-style">Toggle Market</h2>
         <label class="switch">
             <input type="checkbox" id="manual-closed-toggle">
