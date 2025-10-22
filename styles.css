@@ -101,6 +101,69 @@ nav li a b {
   color: var(--primary-light);
 }
 
+/* Hamburger Menu Button */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.nav-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+.nav-toggle-wrapper {
+  display: none;
+  top: 1rem;
+  left: 1rem;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1100;
+}
+
+/* Hover and press states same as your main buttons */
+.nav-toggle-wrapper:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary) 100%);
+}
+
+.nav-toggle-wrapper:active {
+  transform: translateY(0);
+}
+
 #admin-panel {
   display: none;
 }
@@ -135,7 +198,7 @@ main h2, main h3 {
   position: absolute;
   top: 2rem;
   right: 2rem;
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   font-weight: 500;
   color: var(--text-secondary);
   z-index: 100;
@@ -163,7 +226,7 @@ main h2, main h3 {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 0.9rem;
+  font-size: 1rem;
   width: auto;
 }
 
@@ -472,38 +535,73 @@ input:checked + .slider:before {
     padding: 8rem 0;
   }
 }
+
 /* Mobile Responsiveness */
-@media (max-width: 768px) {
-  nav {
-    width: 100%;
-    height: auto;
-    position: relative;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-  }
+@media (max-width: 1000px) {
+
+  #stocks-table td:nth-child(1)::before { content: "Ticker: "; }
+  #stocks-table td:nth-child(2)::before { content: "Company: "; }
+  #stocks-table td:nth-child(3)::before { content: "Price: "; }
+  #stocks-table td:nth-child(4)::before { content: "Volume: "; }
+  #stocks-table td:nth-child(5)::before { content: "Market Cap: "; }
+  #stocks-table td:nth-child(6)::before { content: "Open: "; }
+  #stocks-table td:nth-child(7)::before { content: "High: "; }
+  #stocks-table td:nth-child(8)::before { content: "Low: "; }
   
+  /* Show hamburger */
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-toggle-wrapper {
+  display: flex;
+  position: fixed;
+}
+
+  /* Sidebar becomes overlay */
+  nav {
+    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 240px;
+    background: var(--bg-card);
+    border-right: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  nav.open {
+    transform: translateX(0);
+  }
+
   nav ul {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding: 1rem 0;
+    flex-direction: column;
+    padding: 5rem 1rem;
   }
-  
+
   nav li {
-    margin: 0.25rem;
+    margin: 0.5rem 0;
   }
-  
-  nav a {
-    padding: 0.75rem 1rem;
-    font-size: 0.85rem;
-  }
-  
+
   main {
     margin-left: 0;
     padding: 1rem;
     padding-top: 5rem;
   }
-  
+
+  /* Dim background when nav open */
+  body.nav-open::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
   main h1 {
     font-size: 1.75rem;
   }
@@ -526,7 +624,7 @@ input:checked + .slider:before {
   }
   
   input, select {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px; 
   }
   
   #shares, #sell-shares, #ticker, #sell-ticker {
@@ -551,26 +649,37 @@ input:checked + .slider:before {
     width: 100%;
   }
 
-  #stocks-table tr {
-    margin-bottom: 1rem;
+ #stocks-table tr {
+    margin-bottom: 0.75rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    padding: 0.6rem 0.9rem; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
   #stocks-table td {
-    padding: 0.5rem 0;
-    border: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; 
+    flex-wrap: wrap;           
+    gap: 0.3rem 0.5rem;        
+    font-size: 0.9rem;         
+    color: var(--text-secondary);
+    line-height: 1.2;
+    padding: 0.2rem 0;         
   }
 
   #stocks-table td::before {
-    content: attr(data-label);
+    content: attr(data-label) ": ";
     font-weight: 600;
     color: var(--text-primary);
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+
+  #stocks-table {
+    margin-top: 1rem;
   }
 }
 

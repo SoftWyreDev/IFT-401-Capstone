@@ -7,7 +7,14 @@
     <title>Admin Panel</title>
 </head>
 <body>
-    <nav>
+    <div class="nav-toggle-wrapper">
+        <div class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <nav id="sidebar">
         <ul>
             <li><a href="index.html">Dashboard</a></li>
             <li><a href="portfolio.html">Portfolio</a></li>
@@ -21,7 +28,6 @@
         <h1>IFT 401 Stock Trading System</h1>
         <div id="user-info" class="top-right"></div>
         <button id="logout" class="log-out">Log out</button>
-        <br>
         <h2 class="text-style">Add New Stocks</h2>
         <form id="create-stock">
             <input type="text" name="company" placeholder="Company" required>
@@ -49,6 +55,7 @@
     <script src="create-stock-script.js"></script>
     <script src="update-schedule-script.js"></script>
     <script src="status-script.js"></script>
+    <script src="hamburger.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
 </body>
 </html>

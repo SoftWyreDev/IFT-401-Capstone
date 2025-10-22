@@ -22,5 +22,6 @@ form.onsubmit = async (e) => {
     msg.textContent = errorData.message || 'Login failed';
     msg.style.color = 'red';
     msg.style.fontWeight = 'bold';
+    setTimeout(() => msg.textContent = '', 4000);
   }
 };

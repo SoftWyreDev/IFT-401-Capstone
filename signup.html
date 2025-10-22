@@ -7,17 +7,25 @@
     <title>Home</title>
 </head>
 <body>
-    <nav>
+    <div class="nav-toggle-wrapper">
+        <div class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <nav id="sidebar">
         <ul>
             <li><a href="index.html">Dashboard</a></li>
             <li><a href="portfolio.html">Portfolio</a></li>
             <li><a href="trade.html">Buy/Sell</a></li>
             <li><a href="transfer.html">Deposit/Withdraw</a></li>
             <li><a href="transactions.html">Transactions</a></li>
+            <li id="admin-panel"><a href="admin.html"><b>Admin Panel</b></a></li>
         </ul>
     </nav>
     <main>
-        <h1>IFT 401 Stock Trading System</h1>
+        <h1>Stock Trading Simulator</h1>
         <div id="sign-message" class="sign-message">
             <a href="signup.html">Create Account</a> or <a href="login.html">Login</a>
         </div>
@@ -32,5 +40,6 @@
         <p id="msg"></p>
     </main>
     <script src="/signup-script.js"></script>
+    <script src="hamburger.js"></script>
 </body>
 </html>
