@@ -18,10 +18,10 @@ async function loadStocks() {
     stocks.forEach(stock => {
       const row = document.createElement('tr');
       row.innerHTML = `
-        <td><b>${stock.ticker}</b></td>
-        <td><b>${stock.quantity}</b></td>
-        <td><b>$${parseFloat(stock.current_price).toFixed(2)}</b></td>
-        <td><b>$${parseFloat(stock.current_price * stock.quantity).toFixed(2)}</b></td>
+        <td data-label="Company"><b>${stock.ticker}</b></td>
+        <td data-label="Shares"><b>${stock.quantity}</b></td>
+        <td data-label="Current Price"><b>$${parseFloat(stock.current_price).toFixed(2)}</b></td>
+        <td data-label="Market Value"><b>$${parseFloat(stock.current_price * stock.quantity).toFixed(2)}</b></td>
       `;
       tableBody.appendChild(row);
     });

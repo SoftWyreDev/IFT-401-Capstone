@@ -34,18 +34,18 @@ function formatVolume(value) {
       stocks.forEach(stock => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><b>${stock.ticker}</b></td>
-          <td>${stock.company}</td>
-          <td><b>$${parseFloat(stock.price).toFixed(2)}</b></td>
-          <td><b>${formatVolume(stock.volume)}</b></td>
-          <td><b>$${
+          <td data-label="Ticker"><b>${stock.ticker}</b></td>
+          <td data-label="Company">${stock.company}</td>
+          <td data-label="Price"><b>$${parseFloat(stock.price).toFixed(2)}</b></td>
+          <td data-label="Volume"><b>${formatVolume(stock.volume)}</b></td>
+          <td data-label="Market Cap"><b>$${
             stock.volume * stock.price < 1000 
               ? (stock.volume * stock.price).toFixed(2) 
               : formatMarketCap(stock.volume * stock.price)
           }</b></td>
-          <td><b>$${parseFloat(stock.price_open).toFixed(2)}</b></td>
-          <td><b>$${parseFloat(stock.price_high).toFixed(2)}</b></td>
-          <td><b>$${parseFloat(stock.price_low).toFixed(2)}</b></td>
+          <td data-label="Open"><b>$${parseFloat(stock.price_open).toFixed(2)}</b></td>
+          <td data-label="High"><b>$${parseFloat(stock.price_high).toFixed(2)}</b></td>
+          <td data-label="Low"><b>$${parseFloat(stock.price_low).toFixed(2)}</b></td>
         `;
         tableBody.appendChild(row);
       });

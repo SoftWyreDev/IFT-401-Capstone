@@ -498,6 +498,10 @@ input:checked + .slider:before {
   animation: fadeIn 0.3s ease;
 }
 
+#schedule-msg:empty, #buy-msg:empty, #sell-msg:empty, #deposit-msg:empty, #withdraw-msg {
+  display: none;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -538,15 +542,9 @@ input:checked + .slider:before {
 
 /* Mobile Responsiveness */
 @media (max-width: 1000px) {
-
-  #stocks-table td:nth-child(1)::before { content: "Ticker: "; }
-  #stocks-table td:nth-child(2)::before { content: "Company: "; }
-  #stocks-table td:nth-child(3)::before { content: "Price: "; }
-  #stocks-table td:nth-child(4)::before { content: "Volume: "; }
-  #stocks-table td:nth-child(5)::before { content: "Market Cap: "; }
-  #stocks-table td:nth-child(6)::before { content: "Open: "; }
-  #stocks-table td:nth-child(7)::before { content: "High: "; }
-  #stocks-table td:nth-child(8)::before { content: "Low: "; }
+  .hide-mobile {
+    display: none !important;
+  }
   
   /* Show hamburger */
   .nav-toggle {
@@ -558,7 +556,7 @@ input:checked + .slider:before {
   position: fixed;
 }
 
-  /* Sidebar becomes overlay */
+  /* Sidebar*/
   nav {
     transform: translateX(-100%);
     position: fixed;
@@ -613,7 +611,7 @@ input:checked + .slider:before {
   }
   
   .log-out {
-    top: 3rem;
+    top: 2rem;
     right: 1rem;
     padding: 0.5rem 1rem;
     font-size: 0.85rem;
@@ -623,13 +621,52 @@ input:checked + .slider:before {
     padding: 1.5rem;
   }
   
-  input, select {
-    font-size: 16px; 
+  input,
+  select {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+    box-sizing: border-box;
+  }
+
+  #deposit-amount,
+  #withdraw-amount {
+    width: 100%;
+    max-width: 320px;
   }
   
+  #open-time,
+  #close-time {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  #open-time {
+    margin: 1rem 0;  
+  }  
+  
+  #save-schedule {
+    margin-top: 0rem !important;
+    margin-bottom: 0rem
+  }
+
   #shares, #sell-shares, #ticker, #sell-ticker {
     width: 100%;
     margin: 0.5rem 0;
+  }
+
+  .cancel-btn {
+    padding: 0.1rem 0.4rem;
+    font-size: 0.75rem;
+    border-width: 1px;
+    transform: translateZ(0);
+  }
+
+  .cancel-btn:hover {
+    transform: none;
+    box-shadow: none;
   }
   
   #stocks-table {
@@ -649,37 +686,47 @@ input:checked + .slider:before {
     width: 100%;
   }
 
- #stocks-table tr {
-    margin-bottom: 0.75rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-    padding: 0.6rem 0.9rem; 
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  #stocks-table td {
-    display: flex;
-    justify-content: flex-start; 
-    flex-wrap: wrap;           
-    gap: 0.3rem 0.5rem;        
-    font-size: 0.9rem;         
-    color: var(--text-secondary);
-    line-height: 1.2;
-    padding: 0.2rem 0;         
+  #stocks-table tbody tr:hover {
+    background: var(--bg-hover);
+    transform: translateY(-2px);
+    transition: all 0.2s ease;
   }
 
   #stocks-table td::before {
     content: attr(data-label) ": ";
     font-weight: 600;
     color: var(--text-primary);
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     opacity: 0.85;
   }
 
   #stocks-table {
     margin-top: 1rem;
+  }
+
+  #stocks-table tbody {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+}
+
+  #stocks-table tr {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    padding: 0.6rem 0.8rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #stocks-table td {
+    display: flex;
+    justify-content: flex-start; 
+    flex-wrap: wrap; 
+    font-size: 0.8rem;
+    padding: 0.2rem 0;
+    line-height: 1.1;
+    gap: 0.3rem 0.5rem;
   }
 }
 
@@ -695,6 +742,68 @@ input:checked + .slider:before {
   
   button[type="submit"], button {
     font-size: 0.9rem;
+  }
+   #stocks-table tbody {
+    gap: 0.5rem;
+  }
+
+  #stocks-table tr {
+    padding: 0.5rem 0.6rem;
+    border-radius: 8px;
+  }
+
+  #stocks-table td {
+    font-size: 0.8rem;
+    line-height: 1.1;
+    padding: 0.15rem 0;
+  }
+
+  #stocks-table td::before {
+    font-size: 0.7rem;
+    opacity: 0.8;
+  }
+
+  /* Inputs fit narrow screens */
+  input,
+  select {
+    width: 100%;
+    max-width: 280px;
+    padding: 0.45rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* Compact buttons */
+
+  .top-right,
+  .sign-message {
+    top: 0.6rem;
+    right: 0.8rem;
+    font-size: 0.7rem;
+  }
+
+  .log-out {
+    top: 1.25rem;
+    right: 0.8rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  .nav-toggle-wrapper {
+    width: 32px;
+    height: 32px;
+    top: 0.6rem;
+    left: 0.6rem;
+    border-radius: 6px;
+  }
+
+  .nav-toggle span {
+    height: 2px;
+  }
+
+  main {
+    padding: 0.8rem;
+    padding-top: 4rem;
   }
 }
 

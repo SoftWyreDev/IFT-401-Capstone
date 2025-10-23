@@ -20,11 +20,11 @@ async function loadUserHistory() {
       .toLocaleString('en-US', { hour12: true });
     const row = document.createElement('tr');
     row.innerHTML = `
-      <td ><b>${item.action}</b></td>
-      <td>${item.ticker || '—'}</td>
-      <td>${item.quantity || '—'}</td>
-      <td>$${amount.toFixed(2)}</td>
-      <td><b>${localTime} (PDT)</b></td>
+      <td data-label="Type"><b>${item.action}</b></td>
+      <td data-label="Ticker">${item.ticker || '—'}</td>
+      <td data-label="Shares">${item.quantity || '—'}</td>
+      <td data-label="Amount">$${amount.toFixed(2)}</td>
+      <td data-label="Created At"><b>${localTime} (PDT)</b></td>
     `;
     tableBody.appendChild(row);
   });

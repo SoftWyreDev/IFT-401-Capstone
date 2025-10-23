@@ -25,12 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
         .toLocaleString('en-US', { hour12: true }); 
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><b>${order.type}</b></td>
-          <td>${order.ticker}</td>
-          <td>${order.shares}</td>
-          <td>${localTime} (PDT)</td>
-          <td><b>${order.status}</b></td>
-          <td>
+          <td data-label="Type"><b>${order.type}</b></td>
+          <td data-label="Ticker">${order.ticker}</td>
+          <td data-label="Shares">${order.shares}</td>
+          <td data-label="Created At">${localTime} (PDT)</td>
+          <td data-label="Status"><b>${order.status}</b></td>
+          <td data-label="Cancel" class="${order.status === 'COMPLETE' ? 'hide-mobile' : ''}">
            ${order.status === 'COMPLETE'
           ? ''
            : `<button class="cancel-btn" onclick="cancelQueuedOrder(${order.id})">❌</button>`}
