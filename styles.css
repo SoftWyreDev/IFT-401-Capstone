@@ -153,7 +153,6 @@ nav li a b {
   z-index: 1100;
 }
 
-/* Hover and press states same as your main buttons */
 .nav-toggle-wrapper:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
@@ -193,7 +192,7 @@ main h2, main h3 {
   font-weight: 600;
 }
 
-/* Top Right Info */
+/* Top Right */
 .sign-message, .top-right {
   position: absolute;
   top: 2rem;
@@ -541,7 +540,7 @@ input:checked + .slider:before {
 }
 
 /* Mobile Responsiveness */
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .hide-mobile {
     display: none !important;
   }
