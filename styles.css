@@ -55,7 +55,7 @@ nav ul {
 }
 
 nav li {
-  margin: 0.5rem 1rem;
+  margin: 1rem 1rem;
   transition: transform 0.2s ease;
 }
 
@@ -497,7 +497,7 @@ input:checked + .slider:before {
   animation: fadeIn 0.3s ease;
 }
 
-#schedule-msg:empty, #buy-msg:empty, #sell-msg:empty, #deposit-msg:empty, #withdraw-msg {
+#schedule-msg:empty, #buy-msg:empty, #sell-msg:empty, #deposit-msg:empty, #withdraw-msg:empty {
   display: none;
 }
 
@@ -535,7 +535,7 @@ input:checked + .slider:before {
 
 @media (min-height: 800px) {
   nav ul {
-    padding: 8rem 0;
+    padding: 13rem 0;
   }
 }
 

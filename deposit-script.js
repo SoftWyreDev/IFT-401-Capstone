@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!res.ok) {
         depositMsg.textContent = await res.text();
+        depositMsg.style.color = "red"
         return;
       }
 
