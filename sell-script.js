@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       userStocks.forEach(stock => {
         const option = document.createElement('option');
         option.value = stock.ticker;
-        option.textContent = `${stock.ticker} - ${stock.quantity} shares`;
+        const price = parseFloat(stock.current_price).toFixed(2);
+        option.textContent = `${stock.ticker} - $${price} - ${stock.quantity} shares`;
         sellTickerSelect.appendChild(option);
       });
     } catch (err) {
@@ -60,7 +61,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           sellMsg.textContent = '';
         }, 5000);
         sellMsg.style.color = 'green';
-        sellMsg.style.fontFamily = "Times New Roman"
         document.getElementById('sell-shares').value = '';
         setTimeout(() => {
           sellMsg.textContent = '';
@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else {
         sellMsg.textContent = data.message || data.error || 'Error occurred';
         sellMsg.style.color = 'red';
-        sellMsg.style.fontFamily = "Times New Roman"
         setTimeout(() => {
           sellMsg.textContent = '';
           }, 5000);
@@ -82,7 +81,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error('Error selling stock:', err);
       sellMsg.textContent = 'Error processing sell order';
       sellMsg.style.color = 'red';
-      sellMsg.style.fontFamily = "Times New Roman"
       setTimeout(() => {
         sellMsg.textContent = '';
         }, 5000);

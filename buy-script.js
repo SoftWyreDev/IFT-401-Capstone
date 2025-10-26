@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (res.ok) {
     buyMsg.innerHTML = data.message;
     buyMsg.style.color = 'green';
-    buyMsg.style.fontFamily = "Times New Roman"
     setTimeout(() => {
     buyMsg.textContent = '';
     }, 5000);
@@ -48,7 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else {
     buyMsg.textContent = data.message || data.error || 'Error occurred';
     buyMsg.style.color = 'red';
-    buyMsg.style.fontFamily = "Times New Roman"
     setTimeout(() => {
     buyMsg.textContent = '';
     }, 5000);

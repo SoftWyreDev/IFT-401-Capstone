@@ -360,14 +360,14 @@ button[type="submit"]:active {
 }
 
 #shares, #sell-shares {
-  width: 200px;
+  width: 240px;
   display: inline-block;
   margin-right: 1rem;
   max-width: none;
 }
 
 #ticker, #sell-ticker {
-  width: 200px;
+  width: 240px;
   display: inline-block;
   margin-right: 1rem;
   max-width: none;
