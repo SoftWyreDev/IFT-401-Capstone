@@ -21,12 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
         withdrawMsg.textContent = await res.text();
         withdrawMsg.style.color = 'red';
         withdrawMsg.style.fontWeight="bold"
+        setTimeout(() => {
+          withdrawMsg.textContent = '';
+          }, 5000);
         return;
       }
 
       withdrawMsg.textContent = `$${amount.toFixed(2)} Withdrawn!`;
       withdrawMsg.style.color = 'green';
       withdrawMsg.style.fontWeight = 'bold';
+      setTimeout(() => {
+          withdrawMsg.textContent = '';
+          }, 5000)
       document.getElementById('withdraw-amount').value = '';
 
       await loadBalance();

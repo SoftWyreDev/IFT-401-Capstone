@@ -20,12 +20,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) {
         depositMsg.textContent = await res.text();
         depositMsg.style.color = "red"
+        setTimeout(() => {
+          depositMsg.textContent = '';
+          }, 5000)
         return;
       }
 
       depositMsg.textContent = `$${amount.toFixed(2)} Deposited!`;
       depositMsg.style.color = "green"
       depositMsg.style.fontWeight = "bold"
+      setTimeout(() => {
+          depositMsg.textContent = '';
+          }, 5000)
       document.getElementById('deposit-amount').value = '';
 
       // Reload balance

@@ -62,11 +62,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         sellMsg.style.color = 'green';
         sellMsg.style.fontFamily = "Times New Roman"
         document.getElementById('sell-shares').value = '';
+        setTimeout(() => {
+          sellMsg.textContent = '';
+          }, 5000);
         await window.loadQueuedOrders();
       } else {
         sellMsg.textContent = data.message || data.error || 'Error occurred';
         sellMsg.style.color = 'red';
         sellMsg.style.fontFamily = "Times New Roman"
+        setTimeout(() => {
+          sellMsg.textContent = '';
+          }, 5000);
       }
 
       await loadBalance();
@@ -77,6 +83,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       sellMsg.textContent = 'Error processing sell order';
       sellMsg.style.color = 'red';
       sellMsg.style.fontFamily = "Times New Roman"
+      setTimeout(() => {
+        sellMsg.textContent = '';
+        }, 5000);
     }
   });
 });

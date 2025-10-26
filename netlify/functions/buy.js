@@ -72,6 +72,21 @@ export async function handler(event) {
     if (isNaN(qty) || qty <= 0) {
       return { statusCode: 400, body: JSON.stringify({ message: 'Invalid shares value' }) };
     }
+    
+    //Get stock data
+    const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
+    if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
+    const price = Number(stockData[0].price);
+    const totalCost = Math.round(price * 100) * qty / 100;
+
+    // Get user balance
+    const user = await sql`SELECT balance FROM users WHERE id = ${userId}`;
+    if (user.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'User not found' }) };
+    const balance = Number(user[0].balance);
+
+    if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
+
+    if (balance < totalCost) return { statusCode: 400, body: JSON.stringify({ message: 'Insufficient Funds' }) };
 
     // Get trading rules from DB 
     const tradingRules = await sql`SELECT * FROM market_schedule LIMIT 1`;
@@ -80,10 +95,6 @@ export async function handler(event) {
       return { statusCode: 500, body: JSON.stringify({ error: 'Trading rules not found' }) };
     }
 
-    const stockData = await sql`SELECT price FROM stocks WHERE ticker = ${ticker}`;
-    if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
-    const price = Number(stockData[0].price);
-    const totalCost = Math.round(price * 100) * qty / 100;
     const marketSchedule = tradingRules[0];
 
     const tradingStatus = checkTradingTime(marketSchedule);
@@ -104,14 +115,7 @@ export async function handler(event) {
     };
   }
 
-    // Get user balance 
-    const user = await sql`SELECT balance FROM users WHERE id = ${userId}`;
-    if (user.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'User not found' }) };
-    const balance = Number(user[0].balance);
 
-    if (stockData.length === 0) return { statusCode: 404, body: JSON.stringify({ error: 'Stock not found' }) };
-
-    if (balance < totalCost) return { statusCode: 400, body: JSON.stringify({ message: 'Insufficient Funds' }) };
 
     // Update or insert stock holdings
     const existing = await sql`SELECT quantity FROM user_stocks WHERE user_id = ${userId} AND ticker = ${ticker}`;
