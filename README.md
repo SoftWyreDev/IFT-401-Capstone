@@ -1,4 +1,4 @@
-# Stock Trading Simulator
+# TraderSim - Stock Trading Simulator
 
 Stock trading web application built to replicate the experience of a live exchange with dynamic, shifting prices.
 
