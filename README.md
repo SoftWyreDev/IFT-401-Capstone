@@ -7,7 +7,7 @@ Stock trading web application built to replicate the experience of a live exchan
 A full-stack stock trading app built and designed using serverless Node.js functions, integrated with a PostgreSQL Neon database.
 Implements JSON Web Tokens for user authentication, authorization, and role-based access control.
 
-## [Visit Here](https://ift-capstone.netlify.app/)
+## [Visit Here](https://tradersim.netlify.app/)
 
 ## Features   
 
