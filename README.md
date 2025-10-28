@@ -22,4 +22,4 @@ Implements JSON Web Tokens for user authentication, authorization, and role-base
 HTML • CSS • JavaScript • Node.js • Netlify (Hosting) • PostgreSQL (NeonDB)
 
 ## Author
-Alex Bahler (contact [at] alexbahler [dot] com)
+Alex Bahler — contact [at] alexbahler [dot] com
