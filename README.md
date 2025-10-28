@@ -1,10 +1,10 @@
 # TraderSim - Stock Trading Simulator
 
-Stock trading web application built to replicate the experience of a live exchange with dynamic, shifting prices.
+Stock trading web application developed to replicate the experience of a live exchange with dynamic, shifting prices.
 
 ## Description  
 
-A full-stack stock trading app built and designed using serverless Node.js functions, integrated with a PostgreSQL Neon database.
+A full-stack stock trading app designed and built using serverless Node.js functions, integrated with a PostgreSQL Neon database.
 Implements JSON Web Tokens for user authentication, authorization, and role-based access control.
 
 ## [Visit Here](https://tradersim.netlify.app/)
