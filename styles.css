@@ -101,6 +101,19 @@ nav li a b {
   color: var(--primary-light);
 }
 
+.trader-sim {
+  display: block;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  color: var(--primary-light);
+  border-radius: 12px;
+  font-weight: 900;
+  font-size: 1.25rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
 /* Hamburger Menu Button */
 .nav-toggle {
   display: none;
@@ -424,7 +437,6 @@ button[type="submit"]:active {
 #stocks-table tbody tr:hover {
   background: var(--bg-hover);
   transform: scale(1.01);
-  cursor: pointer;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
@@ -535,7 +547,7 @@ input:checked + .slider:before {
 
 @media (min-height: 800px) {
   nav ul {
-    padding: 13rem 0;
+    padding: 12rem 0;
   }
 }
 
@@ -553,7 +565,7 @@ input:checked + .slider:before {
   .nav-toggle-wrapper {
   display: flex;
   position: fixed;
-}
+  }
 
   /* Sidebar*/
   nav {
@@ -707,7 +719,7 @@ input:checked + .slider:before {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 0.75rem;
-}
+  }
 
   #stocks-table tr {
     background: var(--bg-card);
